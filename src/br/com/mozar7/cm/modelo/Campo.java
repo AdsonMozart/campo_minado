@@ -76,6 +76,10 @@ public class Campo {
 		}
 	}
 	
+	public boolean isMinado() {
+		return minado;
+	}
+	
 	public boolean isMarcado() {
 		return marcado;
 	}
@@ -126,7 +130,7 @@ public class Campo {
 		} else if(aberto) {
 			return " ";
 		} else {
-			return "/";
+			return "?";
 		}
 	}
 	

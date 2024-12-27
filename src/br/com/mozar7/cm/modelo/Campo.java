@@ -11,6 +11,7 @@ public class Campo {
 	private final int LINHA;
 	private final int COLUNA;
 	
+	// Status
 	private boolean aberto = false;
 	private boolean minado = false;
 	private boolean marcado = false;
@@ -23,6 +24,7 @@ public class Campo {
 		this.COLUNA = COLUNA;
 	}
 	
+	// Adicionando os vizinhos da linha, coluna e diagonal que estão próximas
 	boolean adicionarVizinho(Campo vizinho) {
 		boolean linhaDiferente = LINHA != vizinho.LINHA;
 		boolean colunaDiferente = COLUNA != vizinho.COLUNA;
@@ -84,6 +86,11 @@ public class Campo {
 		return marcado;
 	}
 	
+	
+	void setAberto(boolean aberto) {
+		this.aberto = aberto;
+	}
+
 	public boolean isAberto() {
 		return aberto;
 	}

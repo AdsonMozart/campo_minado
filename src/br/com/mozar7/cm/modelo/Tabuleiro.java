@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import br.com.mozar7.cm.excecao.ExplosaoException;
+
 public class Tabuleiro {
 	
 	private int linhas;
@@ -23,11 +25,15 @@ public class Tabuleiro {
 	}
 	
 	public void abrir(int linha, int coluna) {
-		CAMPOS.parallelStream()
+		try {
+			CAMPOS.parallelStream()
 			.filter(c -> c.getLINHA() == linha && c.getCOLUNA() == coluna)
 			.findFirst()
 			.ifPresent(c -> c.abrir());
-			
+		} catch (ExplosaoException e) {
+			CAMPOS.forEach(c -> c.setAberto(true));
+			throw e;
+		}
 	}
 	
 	public void alternarMarcacao(int linha, int coluna) {
@@ -35,7 +41,6 @@ public class Tabuleiro {
 			.filter(c -> c.getLINHA() == linha && c.getCOLUNA() == coluna)
 			.findFirst()
 			.ifPresent(c -> c.alternarMarcacao());
-			
 	}
 
 	private void gerarCampos() {
@@ -59,11 +64,11 @@ public class Tabuleiro {
 		Predicate<Campo> minado = c -> c.isMinado();
 		
 		do {
+			int aleatorio = (int) (Math.random() * CAMPOS.size());
+			CAMPOS.get(aleatorio).minar();
 			minasArmadas = CAMPOS.stream()
 					.filter(minado)
 					.count();
-			int aleatorio = (int) (Math.random() * CAMPOS.size());
-			CAMPOS.get(aleatorio).minar();
 		} while(minasArmadas < minas);
 	}
 	
@@ -78,11 +83,25 @@ public class Tabuleiro {
 		sortearMinas();
 	}
 	
+	// Aparência no console
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		
+		sb.append("   _");
+		System.out.println();
+		for (int c = 0; c < colunas; c++) {
+			sb.append(" ");
+			sb.append(c);
+			sb.append("_");
+					
+		}
+		sb.append("\n");
+	
 		int i = 0;
 		for (int l = 0; l < linhas; l++) {
+			sb.append(" ");
+			sb.append(l);
+			sb.append(" |");
 			for (int c = 0; c < colunas; c++) {
 				sb.append(" ");
 				sb.append(CAMPOS.get(i));
